@@ -1,2 +1,0 @@
-# peacefulWorld
- threejs game
