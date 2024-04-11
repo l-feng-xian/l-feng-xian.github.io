@@ -17,7 +17,7 @@ import { ref, onMounted, defineProps, computed} from 'vue';
 const props = defineProps(['loadingProgress']);
 
 const loadingProgressCpt = computed(() =>{
-    let loadingProgress = parseInt((props.loadingProgress/29 * 100))
+    let loadingProgress = parseInt((props.loadingProgress/26 * 100))
     return loadingProgress + '%';
 })
 
