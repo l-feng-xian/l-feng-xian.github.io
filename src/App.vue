@@ -27,7 +27,7 @@ const dayTimeChange = () =>{
   <div class="day">
     <img @click="dayTimeChange" v-if="dayTime" src="@/assets/dayTime.svg" alt=""></img>
     <img @click="dayTimeChange" v-else src="@/assets/dayNight.svg" alt=""></img>
-    <a href=""><img src="@/assets/github.svg" alt=""></img></a>
+    <a href="https://github.com/l-feng-xian/l-feng-xian.github.io"><img src="@/assets/github.svg" alt=""></img></a>
   </div>
 </template>
 
