@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import EmitBus from '../../untils/emitBus';
 import Game from '../Game';
-// import RAPIER from 'https://cdn.skypack.dev/@dimforge/rapier3d-compat';
+import RAPIER from 'https://cdn.skypack.dev/@dimforge/rapier3d-compat';
 export default class Physics {
     constructor() {
         this.game = new Game();
@@ -13,18 +13,18 @@ export default class Physics {
     }
 
     addPhysics() {
-        import('@dimforge/rapier3d').then(RAPIER => {
-            let gravity = { x: 0.0, y: -9.81, z: 0.0 };
-            this.world = new RAPIER.World(gravity);
-            this.RAPIER = RAPIER;
-            EmitBus.emit("addPhysicsed");
-        })
-        // RAPIER.init().then(() => {
+        // import('@dimforge/rapier3d').then(RAPIER => {
         //     let gravity = { x: 0.0, y: -9.81, z: 0.0 };
         //     this.world = new RAPIER.World(gravity);
         //     this.RAPIER = RAPIER;
         //     EmitBus.emit("addPhysicsed");
-        // });
+        // })
+        RAPIER.init().then(() => {
+            let gravity = { x: 0.0, y: -9.81, z: 0.0 };
+            this.world = new RAPIER.World(gravity);
+            this.RAPIER = RAPIER;
+            EmitBus.emit("addPhysicsed");
+        });
     }
 
     addPhysicsDebug() {
