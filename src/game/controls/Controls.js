@@ -37,8 +37,8 @@ export default class Controls {
     setOrbitControls() {
         this.orbitControls = new OrbitControls(this.game.camera.camera, this.game.canvas);
         this.orbitControls.enablePan = false; //禁用摄像机平移
-        // this.orbitControls.maxDistance = 16;
-        // this.orbitControls.minDistance = 2;
+        this.orbitControls.maxDistance = 16;
+        this.orbitControls.minDistance = 2;
     }
 
     playControls() {
