@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, computed} from 'vue';
+import { ref, onMounted, computed} from 'vue';
 const props = defineProps(['loadingProgress']);
 
 const loadingProgressCpt = computed(() =>{

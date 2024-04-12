@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { OrbitControls } from "./OrbitControls.js";
 import Game from "../Game";
 
 export default class Controls {
