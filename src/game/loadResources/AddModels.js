@@ -152,7 +152,12 @@ export default class AddMash {
                             data.InteractiveList.push({
                                 CSS2DObject: textDiv,
                                 position: child.position,
-                                visible: false
+                                visible: false,
+                                transformPs: {
+                                    x: 70.4608383178711,
+                                    y: 6,
+                                    z: 110.66502380371094
+                                }
                             })
                             // this.game.InteractiveList
                         }

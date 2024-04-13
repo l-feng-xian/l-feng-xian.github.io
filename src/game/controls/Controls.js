@@ -92,44 +92,24 @@ export default class Controls {
             let directionPressed = this.game.InteractiveList.filter(m => m.visible === true)[0];
             if (directionPressed) {
                 this.game.Interactive = true;
-                let translation = {
-                    x: 70.4608383178711,
-                    y: 6,
-                    z: 110.66502380371094
-                };
-                this.game.characterPhysics.characterBody.setNextKinematicTranslation(translation)
+                let translation = directionPressed.transformPs;
 
+                this.positionls = translation;
                 this.game.character.position.x = translation.x;
                 this.game.character.position.y = translation.y - offsect;
                 this.game.character.position.z = translation.z;
-                this.positionls = translation;
                 this.walkDirection.x = this.walkDirection.y = this.walkDirection.z = 0;
                 this.storedFall = 0;
                 this.ray.origin.x = translation.x;
                 this.ray.origin.y = translation.y;
                 this.ray.origin.z = translation.z;
-
-                this.game.camera.camera.position.set( 
-                    translation.x, 
+                this.game.camera.camera.position.set(
+                    translation.x,
                     translation.y + 2,
                     translation.z + 10
                 );
-                
-                const cameraPositionOffset = this.camera.position.sub(this.game.character.position);
 
-                this.game.character.position.x = translation.x;
-                this.game.character.position.y = translation.y - offsect;
-                this.game.character.position.z = translation.z;
-
-                this.camera.position.x = translation.x + cameraPositionOffset.x;
-                this.camera.position.y = (translation.y + cameraPositionOffset.y) - offsect;
-                this.camera.position.z = translation.z + cameraPositionOffset.z;
-
-                this.target.copy(this.game.character.position);
-                this.target.y += 1.5;
-                this.orbitControls.target = this.target;
-                this.orbitControls.update();
-                this.game.sky.skyPosition.copy(translation);
+                this.positionUpDate(translation, offsect);
 
                 this.game.InteractiveList.map(m => {
                     m.CSS2DObject.style.opacity = 0;
@@ -141,7 +121,7 @@ export default class Controls {
                 }, 0.2);
             }
         };
-        if(this.game.Interactive) return;
+        if (this.game.Interactive) return;
         let play = '';
         if (directionPressed && toggleRun) {
             // run
@@ -158,10 +138,10 @@ export default class Controls {
             const nowPlay = this.game.characterAction.animations[this.currentAction];
 
             // nowPlay.crossFadeFrom(toPlay,0.2, true)
-            nowPlay.fadeOut(0.2);
-            toPlay.reset().fadeIn(0.2).play();
             // crossFadeTo
             // this.game.characterAction.animations[play].play()
+            nowPlay.fadeOut(0.2);
+            toPlay.reset().fadeIn(0.2).play();
             this.currentAction = play;
         }
 
@@ -180,19 +160,16 @@ export default class Controls {
             )
 
             //计算人物移动方向夹角
-            let directionOffset = this.directionOffset(this.keysPressed)
+            let directionOffset = this.directionOffset(this.keysPressed);
 
             //旋转人物
-            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
-            this.game.character.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
+            this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset);
+            this.game.character.quaternion.rotateTowards(this.rotateQuarternion, 0.2);
 
-            // console.log(directionOffset);
-
-            this.camera.getWorldDirection(this.walkDirection)
-            this.walkDirection.y = 0
-            this.walkDirection.normalize()
-            this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
-            // console.log(this.walkDirection);
+            this.camera.getWorldDirection(this.walkDirection);
+            this.walkDirection.y = 0;
+            this.walkDirection.normalize();
+            this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset);
 
             // run/walk velocity
             velocity = this.currentAction == 'fastRun' ? 10 : 3;
@@ -233,50 +210,10 @@ export default class Controls {
             this.game.characterPhysics.characterController.computeColliderMovement(this.game.characterPhysics.characterCollider, this.desiredTranslation);
             let correctedMovement = this.game.characterPhysics.characterController.computedMovement();
             if (correctedMovement.x === 0 && correctedMovement.y === 0 && correctedMovement.z === 0) {
-                this.game.characterPhysics.characterBody.setNextKinematicTranslation({
-                    x: this.positionls.x,
-                    y: this.positionls.y,
-                    z: this.positionls.z
-                });
-
-                const cameraPositionOffset = this.camera.position.sub(this.game.character.position);
-
-                this.game.character.position.x = this.positionls.x;
-                this.game.character.position.y = this.positionls.y - offsect;
-                this.game.character.position.z = this.positionls.z;
-
-                this.camera.position.x = this.positionls.x + cameraPositionOffset.x;
-                this.camera.position.y = (this.positionls.y + cameraPositionOffset.y) - offsect;
-                this.camera.position.z = this.positionls.z + cameraPositionOffset.z;
-
-                this.target.copy(this.game.character.position);
-                this.target.y += 1.5;
-                this.orbitControls.target = this.target;
-                this.orbitControls.update();
-                this.game.sky.skyPosition.copy(this.positionls);
+                this.positionUpDate(this.positionls, offsect);
             } else {
                 this.positionls = translation;
-                this.game.characterPhysics.characterBody.setNextKinematicTranslation({
-                    x: translation.x + this.walkDirection.x,
-                    y: translation.y + this.walkDirection.y,
-                    z: translation.z + this.walkDirection.z
-                });
-
-                const cameraPositionOffset = this.camera.position.sub(this.game.character.position);
-
-                this.game.character.position.x = translation.x;
-                this.game.character.position.y = translation.y - offsect;
-                this.game.character.position.z = translation.z;
-
-                this.camera.position.x = translation.x + cameraPositionOffset.x;
-                this.camera.position.y = (translation.y + cameraPositionOffset.y) - offsect;
-                this.camera.position.z = translation.z + cameraPositionOffset.z;
-
-                this.target.copy(this.game.character.position);
-                this.target.y += 1.5;
-                this.orbitControls.target = this.target;
-                this.orbitControls.update();
-                this.game.sky.skyPosition.copy(translation);
+                this.positionUpDate(translation, offsect, this.walkDirection);
 
                 //判断当前距离是否可交互
                 if (this.playControlsRun) {
@@ -295,5 +232,33 @@ export default class Controls {
                 }
             }
         }
+    }
+
+    positionUpDate(translation, offsect, walkDirection) {
+        if(walkDirection) {
+            this.game.characterPhysics.characterBody.setNextKinematicTranslation({
+                x: translation.x + walkDirection.x,
+                y: translation.y + walkDirection.y,
+                z: translation.z + walkDirection.z
+            });
+        } else {
+            this.game.characterPhysics.characterBody.setNextKinematicTranslation(translation);
+        }
+        
+        const cameraPositionOffset = this.camera.position.sub(this.game.character.position);
+
+        this.game.character.position.x = translation.x;
+        this.game.character.position.y = translation.y - offsect;
+        this.game.character.position.z = translation.z;
+
+        this.camera.position.x = translation.x + cameraPositionOffset.x;
+        this.camera.position.y = (translation.y + cameraPositionOffset.y) - offsect;
+        this.camera.position.z = translation.z + cameraPositionOffset.z;
+
+        this.target.copy(this.game.character.position);
+        this.target.y += 1.5;
+        this.orbitControls.target = this.target;
+        this.orbitControls.update();
+        this.game.sky.skyPosition.copy(translation);
     }
 }

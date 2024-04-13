@@ -16,9 +16,10 @@ export default class Resize {
     }
 
     update() {
-        this.game.renderer.setSize(window.innerWidth, window.innerHeight)
+        this.game.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.game.labelRenderer.setSize(window.innerWidth, window.innerHeight);
 
-        this.camera.aspect = window.innerWidth / window.innerHeight
-        this.camera.updateProjectionMatrix()
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
     }
 }
