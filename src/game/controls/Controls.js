@@ -193,6 +193,7 @@ export default class Controls {
 
             if (hit) {
                 const point = this.ray.pointAt(hit.toi);
+                // const point = this.ray.pointAt(hit.timeOfImpact); cdn
                 let diff = translation.y - (point.y + offsect);
                 if (diff <= 0.0) {
                     this.storedFall = 0;
